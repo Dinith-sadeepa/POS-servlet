@@ -1,0 +1,13 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="POS-system-servlet:war exploded">
+    <output-path>$PROJECT_DIR$/out/artifacts/POS_system_servlet_war_exploded</output-path>
+    <root id="root">
+      <element id="javaee-facet-resources" facet="POS-system-servlet/web/Web" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="POS-system-servlet" />
+        </element>
+      </element>
+    </root>
+  </artifact>
+</component>
