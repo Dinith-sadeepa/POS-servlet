@@ -38,4 +38,13 @@
         <servlet-name>Item</servlet-name>
         <url-pattern>/web/item</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>Orders</servlet-name>
+        <servlet-class>webapp.Orders</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Orders</servlet-name>
+        <url-pattern>/web/orders</url-pattern>
+    </servlet-mapping>
 </web-app>
