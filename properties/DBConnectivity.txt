@@ -25,3 +25,20 @@ Create table items(
 );
 
 Insert into items values('i001','item1',2,260.00);
+
+Create table Orders(
+	orderId varchar(255) NOT NULL PRIMARY KEY,
+	orderDate varchar(255),
+	cusId varchar(255) NOT NULL,
+	FOREIGN KEY (cusId) REFERENCES customers(cusId) 
+);
+
+Create table OrderDetails(
+	orderId varchar(255) NOT NULL,
+	itemCode varchar(255) NOT NULL,
+	orderQty int,
+	orderPrice decimal(10,2),
+	FOREIGN KEY (orderId) REFERENCES orders(orderId),
+	FOREIGN KEY (itemCode) REFERENCES items(itemCode) 
+);
+

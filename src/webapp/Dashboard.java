@@ -61,7 +61,7 @@ public class Dashboard extends HttpServlet {
                     "  <div class=\"card-body\">\n" +
                     "    <h5 class=\"card-title\">Place Order</h5>\n" +
                     "    <p class=\"card-text\">Place a order</p>\n" +
-                    "    <a href=\"#\" class=\"btn btn-primary\">Place order now!</a>\n" +
+                    "    <a href=\"/web/orders\" class=\"btn btn-primary\">Place order now!</a>\n" +
                     "  </div>\n" +
                     "</div>");
             writer.write("</div>");

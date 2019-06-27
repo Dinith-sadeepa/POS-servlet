@@ -14,6 +14,10 @@ public class CustomerDTO {
         this.cusAddress = cusAddress;
     }
 
+    public CustomerDTO(String cusId) {
+        this.cusId = cusId;
+    }
+
     public String getCusId() {
         return cusId;
     }

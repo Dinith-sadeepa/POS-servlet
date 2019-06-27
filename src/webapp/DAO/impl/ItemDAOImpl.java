@@ -163,4 +163,34 @@ public class ItemDAOImpl implements ItemDAO {
         }
         return false;
     }
+
+    @Override
+    public boolean updateItemQty(String itemCode, long qty, Connection connection) {
+        PreparedStatement preparedStatement=null;
+
+        try {
+            preparedStatement=connection.prepareStatement("SELECT * FROM items where itemCode = ?;");
+            preparedStatement.setString(1,itemCode);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if(resultSet.next()){
+                int itemQty = resultSet.getInt("itemQty");
+                preparedStatement=connection.prepareStatement("UPDATE items SET itemQty = ? where itemCode = ?;");
+                preparedStatement.setLong(1,(itemQty-qty));
+                preparedStatement.setString(2,itemCode);
+                int i = preparedStatement.executeUpdate();
+                return (i>0);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }finally {
+            if (preparedStatement!=null){
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return false;
+    }
 }
