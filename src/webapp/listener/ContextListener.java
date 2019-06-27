@@ -1,3 +1,5 @@
+package webapp.listener;
+
 import webapp.db.DBConnection;
 
 import javax.naming.NamingException;
@@ -14,6 +16,7 @@ import javax.sql.DataSource;
 @WebListener()
 public class ContextListener implements ServletContextListener {
 
+    private static ServletContext servletContext;
     // -------------------------------------------------------
     // ServletContextListener implementation
     // -------------------------------------------------------
@@ -22,7 +25,7 @@ public class ContextListener implements ServletContextListener {
          initialized(when the Web application is deployed). 
          You can initialize servlet context related data here.
       */
-        ServletContext servletContext = sce.getServletContext();
+        servletContext = sce.getServletContext();
         try {
             DataSource connection = DBConnection.getConnection();
             servletContext.setAttribute("pool", connection);
@@ -38,4 +41,13 @@ public class ContextListener implements ServletContextListener {
       */
         System.out.println("Destroyed!");
     }
+
+    public static ServletContext getServletContext(){
+        if(servletContext != null){
+            return servletContext;
+        }
+        return null;
+    }
+
+
 }
