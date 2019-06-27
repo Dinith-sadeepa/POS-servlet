@@ -1,0 +1,27 @@
+Create database posServlet;
+use posServlet;
+
+Create table users (
+	userId int NOT NULL PRIMARY KEY,
+	username varchar(255),
+	password varchar(255)
+);
+
+Insert into users values(1,'admin','admin');
+
+Create table customers(
+	cusId varchar(255) NOT NULL PRIMARY KEY,
+	cusName varchar(255),
+	cusAddress varchar(255)
+);
+
+Insert into customers values('e001','customer1','galle');
+
+Create table items(
+	itemCode varchar(255) NOT NULL PRIMARY KEY,
+	itemName varchar(255),
+	itemQty int,
+	itemPrice decimal(10,2)
+);
+
+Insert into items values('i001','item1',2,260.00);
