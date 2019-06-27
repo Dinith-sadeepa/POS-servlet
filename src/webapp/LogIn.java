@@ -24,11 +24,9 @@ public class LogIn extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//        System.out.println("called!");
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         boolean isCredentials = logInBO.checkCredentials(username, password);
-//        System.out.println(isCredentials);
         JSONObject jsonObject = new JSONObject();
         if(isCredentials) {
             HttpSession session = request.getSession();
@@ -36,12 +34,10 @@ public class LogIn extends HttpServlet {
             String urlToRedirect = "/web/dashboard";
             jsonObject.put("url",urlToRedirect);
             response.getWriter().write(jsonObject.toString());
-//            request.getRequestDispatcher("/web/dashboard").forward(request, response);
         }else{
             String urlToRedirect = "/";
             jsonObject.put("url",urlToRedirect);
             response.getWriter().write(jsonObject.toString());
-//            request.getRequestDispatcher("/").forward(request, response);
         }
     }
 
@@ -51,7 +47,6 @@ public class LogIn extends HttpServlet {
         writer.write("<html>");
             writer.write("<head><title>POS-Login</title><link rel=\"stylesheet\" href=\"https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css\" integrity=\"sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T\" crossorigin=\"anonymous\"></head>");
             writer.write("<body style=\"background-color: #F6FAFB \">");
-//                writer.write("<div style= \" position: absolute; width: 550px; height: 400px; left: 0; right: 0; top: 0; bottom: 0; margin: auto; background-color: white; box-shadow: 5px 5px #aaaaaa \"");
                     writer.write("<h1 style=\" margin: 20px; text-align: center;\">Good to see you again!</h1>");
                     writer.write("<hr>");
                     writer.write("<div class=\"card\" style= \" position: absolute; width: 400px; height: 250px; left: 0; right: 0; top: 0; bottom: 0; margin: auto; background-color: white; box-shadow: 5px 5px #aaaaaa \">");
@@ -85,9 +80,4 @@ public class LogIn extends HttpServlet {
             writer.write("</body>");
         writer.write("</html>");
     }
-
-//    @Override
-//    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-//        doGet(req, resp);
-//    }
 }
