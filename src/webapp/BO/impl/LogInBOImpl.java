@@ -8,7 +8,7 @@ public class LogInBOImpl implements LogInBO {
     private LogInDAO logInDAO;
 
     public LogInBOImpl() {
-        if(logInDAO == null){
+        if (logInDAO == null) {
             logInDAO = new LogInDAOImpl();
         }
     }

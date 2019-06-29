@@ -27,7 +27,8 @@ public class Customer extends HttpServlet {
         customerBO = new CustomerBOImpl();
     }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException,
+            IOException {
         boolean customer = customerBO.createCustomer(new CustomerDTO(request.getParameter("cusId"),
                 request.getParameter("cusName"),
                 request.getParameter("inputAddress")));
@@ -42,15 +43,16 @@ public class Customer extends HttpServlet {
     }
 
     @Override
-    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException,
+            IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream()));
         String data = br.readLine();
         String[] split = data.split("&");
-        HashMap<String,String> stringHashMap = new HashMap<>();
+        HashMap<String, String> stringHashMap = new HashMap<>();
 
-        for(int i=0 ; i< split.length ; i++){
+        for (int i = 0; i < split.length; i++) {
             String[] keyValue = split[i].split("=");
-            stringHashMap.put(keyValue[0],keyValue[1]);
+            stringHashMap.put(keyValue[0], keyValue[1]);
         }
 
         boolean customer = customerBO.updateCustomer(new CustomerDTO(stringHashMap.get("cusId"),
@@ -67,7 +69,8 @@ public class Customer extends HttpServlet {
     }
 
     @Override
-    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException,
+            IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream()));
         String data = br.readLine();
         boolean customer = customerBO.deleteCustomer(data);
@@ -81,7 +84,8 @@ public class Customer extends HttpServlet {
         }
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException,
+            IOException {
         response.setContentType("application/json");
         List<CustomerDTO> allCustomers = customerBO.getAllCustomers();
 
@@ -102,17 +106,18 @@ public class Customer extends HttpServlet {
                 "  <div class=\"form-row\">\n" +
                 "    <div class=\"form-group col-md-4\">\n" +
                 "      <label for=\"cusId\">Customer Id</label>\n" +
-                "      <input type=\"text\" class=\"form-control\" name=\"cusId\" id=\"cusId\" placeholder=\"Id\">\n" +
+                "      <input required type=\"text\" class=\"form-control\" name=\"cusId\" id=\"cusId\"" +
+                " placeholder=\"Id\">\n" +
                 "    </div>\n" +
                 "    <div class=\"form-group col-md-8\">\n" +
                 "      <label for=\"cusName\">Customer Name</label>\n" +
-                "      <input type=\"text\" class=\"form-control\" name=\"cusName\" " +
+                "      <input required type=\"text\" class=\"form-control\" name=\"cusName\" " +
                 "       placeholder=\"Name\">\n" +
                 "    </div>\n" +
                 "  </div>\n" +
                 "  <div class=\"form-group\">\n" +
                 "    <label for=\"inputAddress\">Address</label>\n" +
-                "    <input type=\"text\" class=\"form-control\" name=\"inputAddress\" " +
+                "    <input required type=\"text\" class=\"form-control\" name=\"inputAddress\" " +
                 "       placeholder=\"1234 Main St\">\n" +
                 "  </div>\n" +
                 "<div class=\"row\">" +
@@ -149,6 +154,13 @@ public class Customer extends HttpServlet {
         writer.write("<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js\"></script>");
         writer.write("<script>");
         writer.write("$(\'#createCus\').click(function () {let customerForm = $(\'#customerForm\').serialize();" +
+                "var empty = true;\n" +
+                "$('input[type=\"text\"]').each(function(){\n" +
+                "   if($(this).val()!=\"\"){\n" +
+                "      empty =false;\n" +
+                "    }\n" +
+                " });" +
+                "if(!empty){" +
                 "$.ajax({\n" +
                 "        url: \"/web/customer\",\n" +
                 "        method: \"POST\",\n" +
@@ -164,8 +176,16 @@ public class Customer extends HttpServlet {
                 "           }\n" +
                 "        }" +
                 "    });" +
+                "}else{alert(\'should define all fields\');}" +
                 "});");
         writer.write("$(\'#updateCus\').click(function () {let customerForm = $(\'#customerForm\').serialize();" +
+                "var empty = true;\n" +
+                "$('input[type=\"text\"]').each(function(){\n" +
+                "   if($(this).val()!=\"\"){\n" +
+                "      empty =false;\n" +
+                "    }\n" +
+                " });" +
+                "if(!empty){" +
                 "$.ajax({\n" +
                 "        url: \"/web/customer\",\n" +
                 "        method: \"PUT\",\n" +
@@ -181,8 +201,16 @@ public class Customer extends HttpServlet {
                 "           }\n" +
                 "        }" +
                 "    });" +
+                "}else{alert(\'should define all fields\');}" +
                 "});");
         writer.write("$(\'#deleteCus\').click(function () {" +
+                "var empty = true;\n" +
+                "$('input[type=\"text\"]').each(function(){\n" +
+                "   if($(this).val()!=\"\"){\n" +
+                "      empty =false;\n" +
+                "    }\n" +
+                " });" +
+                "if(!empty){" +
                 "$.ajax({\n" +
                 "        url: \"/web/customer\",\n" +
                 "        method: \"DELETE\",\n" +
@@ -198,6 +226,7 @@ public class Customer extends HttpServlet {
                 "           }\n" +
                 "        }" +
                 "    });" +
+                "}else{alert(\'should define customer id\');}" +
                 "});");
         writer.write("</script>");
         writer.write("</body>");

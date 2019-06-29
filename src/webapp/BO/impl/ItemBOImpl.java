@@ -37,7 +37,7 @@ public class ItemBOImpl implements ItemBO {
     public List<ItemDTO> getAllItems() {
         List<Item> allItems = itemDAO.getAllItems();
         List<ItemDTO> itemDTOS = new ArrayList<>();
-        if(allItems != null || !allItems.isEmpty()) {
+        if (allItems != null || !allItems.isEmpty()) {
             allItems.forEach(item -> {
                 itemDTOS.add(new ItemDTO(item.getItemCode(),
                         item.getItemName(), item.getItemQty(), item.getItemPrice()));

@@ -16,7 +16,7 @@ public class LogInDAOImpl implements LogInDAO {
 
     public LogInDAOImpl() {
         ServletContext servletContext = ContextListener.getServletContext();
-        if(servletContext.getAttribute("pool") != null) {
+        if (servletContext.getAttribute("pool") != null) {
             pool = (DataSource) servletContext.getAttribute("pool");
         }
     }
@@ -24,31 +24,31 @@ public class LogInDAOImpl implements LogInDAO {
     @Override
     public boolean checkCredentials(String username, String password) {
         Connection connection = null;
-        PreparedStatement preparedStatement=null;
+        PreparedStatement preparedStatement = null;
 
         try {
 
-            connection= pool.getConnection();
-            preparedStatement=connection.prepareStatement("SELECT password from users where username=?");
-            preparedStatement.setString(1,username);
+            connection = pool.getConnection();
+            preparedStatement = connection.prepareStatement("SELECT password from users where username=?");
+            preparedStatement.setString(1, username);
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            if (resultSet.next()){
+            if (resultSet.next()) {
                 return resultSet.getString("password").equalsIgnoreCase(password);
-            }else {
+            } else {
                 return false;
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        }finally {
-            if (preparedStatement!=null){
+        } finally {
+            if (preparedStatement != null) {
                 try {
                     preparedStatement.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
             }
-            if (connection!=null){
+            if (connection != null) {
                 try {
                     connection.close();
                 } catch (SQLException e) {

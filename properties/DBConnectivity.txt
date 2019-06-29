@@ -11,34 +11,37 @@ Insert into users values(1,'admin','admin');
 
 Create table customers(
 	cusId varchar(255) NOT NULL PRIMARY KEY,
-	cusName varchar(255),
-	cusAddress varchar(255)
+	cusName varchar(255) NOT NULL,
+	cusAddress varchar(255) NOT NULL
 );
 
 Insert into customers values('e001','customer1','galle');
 
 Create table items(
 	itemCode varchar(255) NOT NULL PRIMARY KEY,
-	itemName varchar(255),
-	itemQty int,
-	itemPrice decimal(10,2)
+	itemName varchar(255) NOT NULL,
+	itemQty int NOT NULL,
+	itemPrice decimal(10,2) NOT NULL
 );
 
 Insert into items values('i001','item1',2,260.00);
 
 Create table Orders(
 	orderId varchar(255) NOT NULL PRIMARY KEY,
-	orderDate varchar(255),
+	orderDate varchar(255) NOT NULL,
 	cusId varchar(255) NOT NULL,
-	FOREIGN KEY (cusId) REFERENCES customers(cusId) 
+	FOREIGN KEY (cusId) REFERENCES customers(cusId)
+	ON DELETE CASCADE
 );
 
 Create table OrderDetails(
 	orderId varchar(255) NOT NULL,
 	itemCode varchar(255) NOT NULL,
-	orderQty int,
-	orderPrice decimal(10,2),
-	FOREIGN KEY (orderId) REFERENCES orders(orderId),
-	FOREIGN KEY (itemCode) REFERENCES items(itemCode) 
+	orderQty int NOT NULL,
+	orderPrice decimal(10,2) NOT NULL,
+	FOREIGN KEY (orderId) REFERENCES orders(orderId)
+	ON DELETE CASCADE,
+	FOREIGN KEY (itemCode) REFERENCES items(itemCode)
+	ON DELETE CASCADE
 );
 

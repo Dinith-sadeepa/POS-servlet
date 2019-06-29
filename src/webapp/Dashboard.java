@@ -10,7 +10,8 @@ import java.io.PrintWriter;
 
 @WebServlet(name = "Dashboard")
 public class Dashboard extends HttpServlet {
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException,
+            IOException {
 
     }
 
@@ -19,7 +20,8 @@ public class Dashboard extends HttpServlet {
         doGet(req, resp);
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException,
+            IOException {
         PrintWriter writer = response.getWriter();
         response.setContentType("text/html");
         writer.write("<html>");
@@ -29,7 +31,8 @@ public class Dashboard extends HttpServlet {
                 "integrity=\"sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T\" " +
                 "crossorigin=\"anonymous\"></head>");
         writer.write("<body style=\"background-color: #F6FAFB \">");
-            writer.write("<h1>Dashboard</h1>");
+            writer.write("<h1 class=\" text-center  \">Dashboard</h1>");
+            writer.write("<br>");
     //        writer.write("<div class=\"row\"></div>");
             writer.write("<div class=\"row\">\n" +
                     "  <div class=\"col-sm-3\">");

@@ -40,7 +40,7 @@ public class OrdersBOImpl implements OrdersBO {
         Connection connection = null;
 
         ServletContext servletContext = ContextListener.getServletContext();
-        if(servletContext.getAttribute("pool") != null) {
+        if (servletContext.getAttribute("pool") != null) {
             pool = (DataSource) servletContext.getAttribute("pool");
         }
         try {
@@ -51,26 +51,29 @@ public class OrdersBOImpl implements OrdersBO {
         try {
             connection.setAutoCommit(false);
 //            System.out.println(connection);
-            boolean isOrdered = ordersDAO.placeOrder(new Orders(ordersDTO.getOrderId(),ordersDTO.getOrderDate(),ordersDTO.getCustomerDTO().getCusId()),connection);
-            if(isOrdered){
+            boolean isOrdered = ordersDAO.placeOrder(new Orders(ordersDTO.getOrderId(), ordersDTO.getOrderDate(),
+                    ordersDTO.getCustomerDTO().getCusId()), connection);
+            if (isOrdered) {
                 List<OrderDetailsDTO> orderDetailsDTOS = ordersDTO.getOrderDetailsDTOS();
-                for(int i=0 ; i< orderDetailsDTOS.size(); i++){
-                    boolean isOrderDetailsPlaced = orderDetailsDAO.placeOrderDetails(new OrderDetails(orderDetailsDTOS.get(i).getOrderId(),
-                            orderDetailsDTOS.get(i).getItemCode(),
-                            orderDetailsDTOS.get(i).getOrderQty(),
-                            orderDetailsDTOS.get(i).getOrderPrice()),connection);
-                    if(isOrderDetailsPlaced){
-                        boolean isUpdateQty = itemDAO.updateItemQty(orderDetailsDTOS.get(i).getItemCode(), orderDetailsDTOS.get(i).getOrderQty(), connection);
-                        if(!isUpdateQty){
+                for (int i = 0; i < orderDetailsDTOS.size(); i++) {
+                    boolean isOrderDetailsPlaced = orderDetailsDAO.placeOrderDetails(
+                            new OrderDetails(orderDetailsDTOS.get(i).getOrderId(),
+                                    orderDetailsDTOS.get(i).getItemCode(),
+                                    orderDetailsDTOS.get(i).getOrderQty(),
+                                    orderDetailsDTOS.get(i).getOrderPrice()), connection);
+                    if (isOrderDetailsPlaced) {
+                        boolean isUpdateQty = itemDAO.updateItemQty(orderDetailsDTOS.get(i).getItemCode(),
+                                orderDetailsDTOS.get(i).getOrderQty(), connection);
+                        if (!isUpdateQty) {
                             connection.rollback();
                             return false;
                         }
-                    }else{
+                    } else {
                         connection.rollback();
                         return false;
                     }
                 }
-            }else{
+            } else {
                 connection.rollback();
                 return false;
             }

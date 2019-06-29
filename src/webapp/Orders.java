@@ -33,7 +33,8 @@ public class Orders extends HttpServlet {
     private CustomerBO customerBO;
     private ItemBO itemBO;
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException,
+            IOException {
 
         List<OrderDetailsDTO> orderDetailsDTOS = new ArrayList<>();
         String orders = request.getParameter("order");
@@ -45,14 +46,16 @@ public class Orders extends HttpServlet {
                 try {
                     jsonObject = (JSONObject) new JSONParser().parse(order.toString());
                     orderDetailsDTOS.add(new OrderDetailsDTO(request.getParameter("orderId"),
-                            ((String)jsonObject.get("code")),((Long)jsonObject.get("qty")),((Long)jsonObject.get("price"))));
+                            ((String)jsonObject.get("code")),((Long)jsonObject.get("qty")),
+                            ((Long)jsonObject.get("price"))));
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
 //                System.out.println(orderDetailsDTOS);
             });
             boolean isPlaced = ordersBO.placeOrder(new OrdersDTO(request.getParameter("orderId"),
-                    request.getParameter("orderDate"), new CustomerDTO(request.getParameter("cusId")), orderDetailsDTOS));
+                    request.getParameter("orderDate"), new CustomerDTO(request.getParameter("cusId")),
+                    orderDetailsDTOS));
 
             JSONObject jsonObjectRes = new JSONObject();
             if (isPlaced) {
@@ -79,7 +82,8 @@ public class Orders extends HttpServlet {
 //                request.getParameter("orders"));
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException,
+            IOException {
 
         List<CustomerDTO> allCustomers = customerBO.getAllCustomers();
         List<ItemDTO> allItems = itemBO.getAllItems();
@@ -105,7 +109,8 @@ public class Orders extends HttpServlet {
                 "      <select class=\"form-control\" name=\"cusId\" id=\"cusId\" placeholder=\"Id\">" +
                 "<option value=\"\">Select customer id</option> ");
         allCustomers.forEach(customerDTO -> {
-            writer.write("<option value=\"" + customerDTO.getCusId() + "\"> " + customerDTO.getCusId() + " </option>");
+            writer.write("<option value=\"" + customerDTO.getCusId() + "\"> " + customerDTO.getCusId() +
+                    " </option>");
         });
         writer.write("</select>\n" +
                 "    </div>\n" +
@@ -126,7 +131,8 @@ public class Orders extends HttpServlet {
                 "    <select class=\"form-control\" name=\"itemCode\" id=\"itemCode\" placeholder=\"Item Code\">" +
                 " <option value=\"\">Select item code</option> ");
         allItems.forEach(itemDTO -> {
-            writer.write("<option value=\"" + itemDTO.getItemCode() + "," + itemDTO.getItemQty() + "," + itemDTO.getItemPrice() + "\"> " + itemDTO.getItemCode() + " </option>");
+            writer.write("<option value=\"" + itemDTO.getItemCode() + "," + itemDTO.getItemQty() + ","
+                    + itemDTO.getItemPrice() + "\"> " + itemDTO.getItemCode() + " </option>");
         });
         writer.write("</select>\n" +
                 "  </div>\n" +
@@ -185,9 +191,12 @@ public class Orders extends HttpServlet {
                 "var orders = [];");
         writer.write("$(\'#addToListButton\').click(function () {" +
                 "$(\'#orderTable\').empty();" +
-                "let code = $(\'#itemCode\').val().split(\",\")[0];" +
-                "let qty = $(\'#itemQty\').val();" +
-                "let price = $(\'#itemUnitPrice\').val();" +
+                "let code; if($(\'#itemCode\').val().split(\",\")[0]!=\"\"){" +
+                "code = $(\'#itemCode\').val().split(\",\")[0];}else{return alert(\'item code should define!\');};" +
+                "let qty; if($(\'#itemQty\').val()!=\"\"){qty= $(\'#itemQty\').val();}" +
+                "else{return alert(\'item qty should define!\');};" +
+                "let price; if($(\'#itemUnitPrice\').val()!=\"\"){price=$(\'#itemUnitPrice\').val();}" +
+                "else{return alert(\'item price should define!\');};" +
                 "if(orders.length > 0){" +
                 "   var added = false;" +
                 "for(var i=0; i<orders.length; i++){" +
@@ -199,22 +208,26 @@ public class Orders extends HttpServlet {
                 "   }" +
                 "}" +
                 "if(!added){" +
-                "var order = { code: code, qty: parseInt(qty), price: parseFloat(price), total : (parseFloat(price) * parseInt(qty))  }; " +
+                "var order = { code: code, qty: parseInt(qty), price: parseFloat(price)," +
+                " total : (parseFloat(price) * parseInt(qty))  }; " +
                 "orders.push(order); " +
                 "}" +
                 "}else{" +
-                "var order = { code: code, qty: parseInt(qty), price: parseFloat(price), total : (parseFloat(price) * parseInt(qty))  }; " +
+                "var order = { code: code, qty: parseInt(qty), price: parseFloat(price)," +
+                " total : (parseFloat(price) * parseInt(qty))  }; " +
                 "orders.push(order); " +
                 "}" +
                 "var total = 0;" +
                 "for(var i=0; i<orders.length; i++){" +
                 "total = (parseFloat(total) + parseFloat(orders[i].total));" +
-                "$(\'#orderTable\').append(\'<tr><td>\'+orders[i].code+\'</td><td>\'+orders[i].qty+\'</td><td>\'+orders[i].price+\'</td><td>\'+orders[i].total+\'</td></tr>\');" +
+                "$(\'#orderTable\').append(\'<tr><td>\'+orders[i].code+\'</td><td>\'+orders[i].qty+\'</td>" +
+                "<td>\'+orders[i].price+\'</td><td>\'+orders[i].total+\'</td></tr>\');" +
                 "}" +
                 "console.log(total);" +
                 "$(\'#total\').html(\"Total Price is : \" +total + \"/=\");" +
                 "});");
         writer.write("$(\'#placeOrder\').click(function () {let orderForm = $(\'#orderForm\').serialize();" +
+                "if(orders.length>0){" +
                 "var jsonData = JSON.stringify(orders);" +
                 "$.ajax({\n" +
                 "        url: \"/web/orders\",\n" +
@@ -231,6 +244,7 @@ public class Orders extends HttpServlet {
                 "           }\n" +
                 "        }" +
                 "    });" +
+                "}else{alert(\'Orders are empty!\');}" +
                 "});");
 //        writer.write("$(\'#deleteCus\').click(function () {" +
 //                "$.ajax({\n" +

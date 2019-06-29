@@ -19,7 +19,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 
     public CustomerDAOImpl() {
         ServletContext servletContext = ContextListener.getServletContext();
-        if(servletContext.getAttribute("pool") != null) {
+        if (servletContext.getAttribute("pool") != null) {
             pool = (DataSource) servletContext.getAttribute("pool");
         }
     }
@@ -27,27 +27,27 @@ public class CustomerDAOImpl implements CustomerDAO {
     @Override
     public boolean createCustomer(Customer customer) {
         Connection connection = null;
-        PreparedStatement preparedStatement=null;
+        PreparedStatement preparedStatement = null;
 
         try {
-            connection= pool.getConnection();
-            preparedStatement=connection.prepareStatement("INSERT INTO customers values (?,?,?);");
-            preparedStatement.setString(1,customer.getCusId());
-            preparedStatement.setString(2,customer.getCusName());
-            preparedStatement.setString(3,customer.getCusAddress());
+            connection = pool.getConnection();
+            preparedStatement = connection.prepareStatement("INSERT INTO customers values (?,?,?);");
+            preparedStatement.setString(1, customer.getCusId());
+            preparedStatement.setString(2, customer.getCusName());
+            preparedStatement.setString(3, customer.getCusAddress());
             int i = preparedStatement.executeUpdate();
-            return (i>0);
+            return (i > 0);
         } catch (SQLException e) {
             e.printStackTrace();
-        }finally {
-            if (preparedStatement!=null){
+        } finally {
+            if (preparedStatement != null) {
                 try {
                     preparedStatement.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
             }
-            if (connection!=null){
+            if (connection != null) {
                 try {
                     connection.close();
                 } catch (SQLException e) {
@@ -61,14 +61,14 @@ public class CustomerDAOImpl implements CustomerDAO {
     @Override
     public List<Customer> getAllCustomers() {
         Connection connection = null;
-        PreparedStatement preparedStatement=null;
+        PreparedStatement preparedStatement = null;
 
         try {
-            connection= pool.getConnection();
-            preparedStatement=connection.prepareStatement("SELECT * FROM customers;");
+            connection = pool.getConnection();
+            preparedStatement = connection.prepareStatement("SELECT * FROM customers;");
             ResultSet resultSet = preparedStatement.executeQuery();
             List<Customer> customerList = new ArrayList<>();
-            while (resultSet.next()){
+            while (resultSet.next()) {
                 customerList.add(new Customer(resultSet.getString("cusId"),
                         resultSet.getString("cusName"),
                         resultSet.getString("cusAddress")));
@@ -76,15 +76,15 @@ public class CustomerDAOImpl implements CustomerDAO {
             return customerList;
         } catch (SQLException e) {
             e.printStackTrace();
-        }finally {
-            if (preparedStatement!=null){
+        } finally {
+            if (preparedStatement != null) {
                 try {
                     preparedStatement.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
             }
-            if (connection!=null){
+            if (connection != null) {
                 try {
                     connection.close();
                 } catch (SQLException e) {
@@ -98,27 +98,28 @@ public class CustomerDAOImpl implements CustomerDAO {
     @Override
     public boolean updateCustomer(Customer customer) {
         Connection connection = null;
-        PreparedStatement preparedStatement=null;
+        PreparedStatement preparedStatement = null;
 
         try {
-            connection= pool.getConnection();
-            preparedStatement=connection.prepareStatement("UPDATE customers SET cusName = ?, cusAddress = ? where cusId = ?;");
-            preparedStatement.setString(1,customer.getCusName());
-            preparedStatement.setString(2,customer.getCusAddress());
-            preparedStatement.setString(3,customer.getCusId());
+            connection = pool.getConnection();
+            preparedStatement = connection.prepareStatement("UPDATE customers SET cusName = ?, cusAddress = ?" +
+                    " where cusId = ?;");
+            preparedStatement.setString(1, customer.getCusName());
+            preparedStatement.setString(2, customer.getCusAddress());
+            preparedStatement.setString(3, customer.getCusId());
             int i = preparedStatement.executeUpdate();
-            return (i>0);
+            return (i > 0);
         } catch (SQLException e) {
             e.printStackTrace();
-        }finally {
-            if (preparedStatement!=null){
+        } finally {
+            if (preparedStatement != null) {
                 try {
                     preparedStatement.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
             }
-            if (connection!=null){
+            if (connection != null) {
                 try {
                     connection.close();
                 } catch (SQLException e) {
@@ -132,25 +133,25 @@ public class CustomerDAOImpl implements CustomerDAO {
     @Override
     public boolean deleteCustomer(String cusId) {
         Connection connection = null;
-        PreparedStatement preparedStatement=null;
+        PreparedStatement preparedStatement = null;
 
         try {
-            connection= pool.getConnection();
-            preparedStatement=connection.prepareStatement("DELETE FROM customers where cusId = ?;");
-            preparedStatement.setString(1,cusId);
+            connection = pool.getConnection();
+            preparedStatement = connection.prepareStatement("DELETE FROM customers where cusId = ?;");
+            preparedStatement.setString(1, cusId);
             int i = preparedStatement.executeUpdate();
-            return (i>0);
+            return (i > 0);
         } catch (SQLException e) {
             e.printStackTrace();
-        }finally {
-            if (preparedStatement!=null){
+        } finally {
+            if (preparedStatement != null) {
                 try {
                     preparedStatement.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
             }
-            if (connection!=null){
+            if (connection != null) {
                 try {
                     connection.close();
                 } catch (SQLException e) {

@@ -15,26 +15,26 @@ public class OrdersDAOImpl implements OrdersDAO {
 
     public OrdersDAOImpl() {
         ServletContext servletContext = ContextListener.getServletContext();
-        if(servletContext.getAttribute("pool") != null) {
+        if (servletContext.getAttribute("pool") != null) {
             pool = (DataSource) servletContext.getAttribute("pool");
         }
     }
 
     @Override
     public boolean placeOrder(Orders orders, Connection connection) {
-        PreparedStatement preparedStatement=null;
+        PreparedStatement preparedStatement = null;
 
         try {
-            preparedStatement=connection.prepareStatement("INSERT INTO orders values (?,?,?);");
-            preparedStatement.setString(1,orders.getOrderId());
-            preparedStatement.setString(2,orders.getOrderDate());
-            preparedStatement.setString(3,orders.getCustomer());
+            preparedStatement = connection.prepareStatement("INSERT INTO orders values (?,?,?);");
+            preparedStatement.setString(1, orders.getOrderId());
+            preparedStatement.setString(2, orders.getOrderDate());
+            preparedStatement.setString(3, orders.getCustomer());
             int i = preparedStatement.executeUpdate();
-            return (i>0);
+            return (i > 0);
         } catch (SQLException e) {
             e.printStackTrace();
-        }finally {
-            if (preparedStatement!=null){
+        } finally {
+            if (preparedStatement != null) {
                 try {
                     preparedStatement.close();
                 } catch (SQLException e) {

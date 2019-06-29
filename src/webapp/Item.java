@@ -28,7 +28,8 @@ public class Item extends HttpServlet {
         itemBO = new ItemBOImpl();
     }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException,
+            IOException {
         boolean item = itemBO.createItem(new ItemDTO(request.getParameter("itemCode"),
                 request.getParameter("itemName"),
                 Integer.parseInt(request.getParameter("itemQty")),
@@ -44,7 +45,8 @@ public class Item extends HttpServlet {
     }
 
     @Override
-    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException,
+            IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream()));
         String data = br.readLine();
         String[] split = data.split("&");
@@ -70,7 +72,8 @@ public class Item extends HttpServlet {
     }
 
     @Override
-    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException,
+            IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream()));
         String data = br.readLine();
         boolean item = itemBO.deleteItem(data);
@@ -84,7 +87,8 @@ public class Item extends HttpServlet {
         }
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException,
+            IOException {
         response.setContentType("application/json");
         List<ItemDTO> allItems = itemBO.getAllItems();
 
@@ -105,7 +109,8 @@ public class Item extends HttpServlet {
                 "  <div class=\"form-row\">\n" +
                 "    <div class=\"form-group col-md-4\">\n" +
                 "      <label for=\"itemCode\">Item Code</label>\n" +
-                "      <input type=\"text\" class=\"form-control\" id=\"itemCode\" name=\"itemCode\" placeholder=\"Code\">\n" +
+                "      <input type=\"text\" class=\"form-control\" id=\"itemCode\" name=\"itemCode\" " +
+                "placeholder=\"Code\">\n" +
                 "    </div>\n" +
                 "    <div class=\"form-group col-md-8\">\n" +
                 "      <label for=\"itemName\">Item Name</label>\n" +
@@ -158,6 +163,13 @@ public class Item extends HttpServlet {
         writer.write("<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js\"></script>");
         writer.write("<script>");
         writer.write("$(\'#itemCreate\').click(function () {let itemForm = $(\'#itemForm\').serialize();" +
+                "var empty = true;\n" +
+                "$('input[type=\"text\"]').each(function(){\n" +
+                "   if($(this).val()!=\"\"){\n" +
+                "      empty =false;\n" +
+                "    }\n" +
+                " });" +
+                "if(!empty){" +
                 "$.ajax({\n" +
                 "        url: \"/web/item\",\n" +
                 "        method: \"POST\",\n" +
@@ -173,8 +185,16 @@ public class Item extends HttpServlet {
                 "           }\n" +
                 "        }" +
                 "    });" +
+                "}else{alert(\'should define all fields!\');}" +
                 "});");
         writer.write("$(\'#itemUpdate\').click(function () {let itemForm = $(\'#itemForm\').serialize();" +
+                "var empty = true;\n" +
+                "$('input[type=\"text\"]').each(function(){\n" +
+                "   if($(this).val()!=\"\"){\n" +
+                "      empty =false;\n" +
+                "    }\n" +
+                " });" +
+                "if(!empty){" +
                 "$.ajax({\n" +
                 "        url: \"/web/item\",\n" +
                 "        method: \"PUT\",\n" +
@@ -190,8 +210,16 @@ public class Item extends HttpServlet {
                 "           }\n" +
                 "        }" +
                 "    });" +
+                "}else{alert(\'should define all fields!\');}" +
                 "});");
         writer.write("$(\'#itemDelete\').click(function () {" +
+                "var empty = true;\n" +
+                "$('input[type=\"text\"]').each(function(){\n" +
+                "   if($(this).val()!=\"\"){\n" +
+                "      empty =false;\n" +
+                "    }\n" +
+                " });" +
+                "if(!empty){" +
                 "$.ajax({\n" +
                 "        url: \"/web/item\",\n" +
                 "        method: \"DELETE\",\n" +
@@ -207,6 +235,7 @@ public class Item extends HttpServlet {
                 "           }\n" +
                 "        }" +
                 "    });" +
+                "}else{alert(\'should define item code!\');}" +
                 "});");
         writer.write("</script>");
         writer.write("</body>");

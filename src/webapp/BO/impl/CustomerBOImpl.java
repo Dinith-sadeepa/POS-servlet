@@ -18,16 +18,17 @@ public class CustomerBOImpl implements CustomerBO {
 
     @Override
     public boolean createCustomer(CustomerDTO customerDTO) {
-        return customerDAO.createCustomer(new Customer(customerDTO.getCusId(),customerDTO.getCusName(),customerDTO.getCusAddress()));
+        return customerDAO.createCustomer(new Customer(customerDTO.getCusId(),
+                customerDTO.getCusName(), customerDTO.getCusAddress()));
     }
 
     @Override
     public List<CustomerDTO> getAllCustomers() {
         List<Customer> allCustomers = customerDAO.getAllCustomers();
         List<CustomerDTO> customerDTOS = new ArrayList<>();
-        if(!allCustomers.isEmpty() || allCustomers != null){
+        if (!allCustomers.isEmpty() || allCustomers != null) {
             allCustomers.forEach(customer -> {
-                customerDTOS.add(new CustomerDTO(customer.getCusId(),customer.getCusName(),customer.getCusAddress()));
+                customerDTOS.add(new CustomerDTO(customer.getCusId(), customer.getCusName(), customer.getCusAddress()));
             });
         }
         return customerDTOS;
@@ -35,7 +36,8 @@ public class CustomerBOImpl implements CustomerBO {
 
     @Override
     public boolean updateCustomer(CustomerDTO customerDTO) {
-        return customerDAO.updateCustomer(new Customer(customerDTO.getCusId(),customerDTO.getCusName(),customerDTO.getCusAddress()));
+        return customerDAO.updateCustomer(new Customer(customerDTO.getCusId(),
+                customerDTO.getCusName(), customerDTO.getCusAddress()));
     }
 
     @Override

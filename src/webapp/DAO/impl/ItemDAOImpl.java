@@ -62,28 +62,29 @@ public class ItemDAOImpl implements ItemDAO {
     @Override
     public boolean updateItem(Item item) {
         Connection connection = null;
-        PreparedStatement preparedStatement=null;
+        PreparedStatement preparedStatement = null;
 
         try {
-            connection= pool.getConnection();
-            preparedStatement=connection.prepareStatement("UPDATE items SET itemName = ?, itemQty = ?, itemPrice = ? where itemCode = ?;");
-            preparedStatement.setString(1,item.getItemName());
-            preparedStatement.setInt(2,item.getItemQty());
-            preparedStatement.setDouble(3,item.getItemPrice());
-            preparedStatement.setString(4,item.getItemCode());
+            connection = pool.getConnection();
+            preparedStatement = connection.prepareStatement("UPDATE items SET itemName = ?, itemQty = ?, " +
+                    "itemPrice = ? where itemCode = ?;");
+            preparedStatement.setString(1, item.getItemName());
+            preparedStatement.setInt(2, item.getItemQty());
+            preparedStatement.setDouble(3, item.getItemPrice());
+            preparedStatement.setString(4, item.getItemCode());
             int i = preparedStatement.executeUpdate();
-            return (i>0);
+            return (i > 0);
         } catch (SQLException e) {
             e.printStackTrace();
-        }finally {
-            if (preparedStatement!=null){
+        } finally {
+            if (preparedStatement != null) {
                 try {
                     preparedStatement.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
             }
-            if (connection!=null){
+            if (connection != null) {
                 try {
                     connection.close();
                 } catch (SQLException e) {
@@ -97,14 +98,14 @@ public class ItemDAOImpl implements ItemDAO {
     @Override
     public List<Item> getAllItems() {
         Connection connection = null;
-        PreparedStatement preparedStatement=null;
+        PreparedStatement preparedStatement = null;
 
         try {
-            connection= pool.getConnection();
-            preparedStatement=connection.prepareStatement("SELECT * FROM items;");
+            connection = pool.getConnection();
+            preparedStatement = connection.prepareStatement("SELECT * FROM items;");
             ResultSet resultSet = preparedStatement.executeQuery();
             List<Item> itemList = new ArrayList<>();
-            while (resultSet.next()){
+            while (resultSet.next()) {
                 itemList.add(new Item(resultSet.getString("itemCode"),
                         resultSet.getString("itemName"),
                         resultSet.getInt("itemQty"),
@@ -113,15 +114,15 @@ public class ItemDAOImpl implements ItemDAO {
             return itemList;
         } catch (SQLException e) {
             e.printStackTrace();
-        }finally {
-            if (preparedStatement!=null){
+        } finally {
+            if (preparedStatement != null) {
                 try {
                     preparedStatement.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
             }
-            if (connection!=null){
+            if (connection != null) {
                 try {
                     connection.close();
                 } catch (SQLException e) {
@@ -135,25 +136,25 @@ public class ItemDAOImpl implements ItemDAO {
     @Override
     public boolean deleteItem(String itemCode) {
         Connection connection = null;
-        PreparedStatement preparedStatement=null;
+        PreparedStatement preparedStatement = null;
 
         try {
-            connection= pool.getConnection();
-            preparedStatement=connection.prepareStatement("DELETE FROM items where itemCode = ?;");
-            preparedStatement.setString(1,itemCode);
+            connection = pool.getConnection();
+            preparedStatement = connection.prepareStatement("DELETE FROM items where itemCode = ?;");
+            preparedStatement.setString(1, itemCode);
             int i = preparedStatement.executeUpdate();
-            return (i>0);
+            return (i > 0);
         } catch (SQLException e) {
             e.printStackTrace();
-        }finally {
-            if (preparedStatement!=null){
+        } finally {
+            if (preparedStatement != null) {
                 try {
                     preparedStatement.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
             }
-            if (connection!=null){
+            if (connection != null) {
                 try {
                     connection.close();
                 } catch (SQLException e) {
@@ -166,24 +167,24 @@ public class ItemDAOImpl implements ItemDAO {
 
     @Override
     public boolean updateItemQty(String itemCode, long qty, Connection connection) {
-        PreparedStatement preparedStatement=null;
+        PreparedStatement preparedStatement = null;
 
         try {
-            preparedStatement=connection.prepareStatement("SELECT * FROM items where itemCode = ?;");
-            preparedStatement.setString(1,itemCode);
+            preparedStatement = connection.prepareStatement("SELECT * FROM items where itemCode = ?;");
+            preparedStatement.setString(1, itemCode);
             ResultSet resultSet = preparedStatement.executeQuery();
-            if(resultSet.next()){
+            if (resultSet.next()) {
                 int itemQty = resultSet.getInt("itemQty");
-                preparedStatement=connection.prepareStatement("UPDATE items SET itemQty = ? where itemCode = ?;");
-                preparedStatement.setLong(1,(itemQty-qty));
-                preparedStatement.setString(2,itemCode);
+                preparedStatement = connection.prepareStatement("UPDATE items SET itemQty = ? where itemCode = ?;");
+                preparedStatement.setLong(1, (itemQty - qty));
+                preparedStatement.setString(2, itemCode);
                 int i = preparedStatement.executeUpdate();
-                return (i>0);
+                return (i > 0);
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        }finally {
-            if (preparedStatement!=null){
+        } finally {
+            if (preparedStatement != null) {
                 try {
                     preparedStatement.close();
                 } catch (SQLException e) {
